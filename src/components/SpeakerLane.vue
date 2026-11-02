@@ -20,7 +20,7 @@
         :disabled="!supported"
         :aria-pressed="on"
         :aria-label="on ? 'Stop listening' : 'Start listening'"
-        @click="on ? speech.stop() : speech.start(lang)"
+        @click="on ? engine().stop() : engine().start(lang)"
       >
         <span aria-hidden="true">{{ on ? '■' : '🎙️' }}</span>
       </button>
@@ -34,12 +34,14 @@
       <span v-else class="placeholder">{{ on ? 'Waiting for speech…' : 'Live captions appear here' }}</span>
     </div>
     <p class="muted small">
-      Grey italic text is provisional; finished sentences move into the conversation. Most browsers send audio to a remote speech service.
+      Grey italic text is provisional; finished sentences move into the conversation.
+      {{ useScribe ? 'Hindi captions are transcribed by ElevenLabs Scribe, which receives the microphone audio.' : 'Most browsers send audio to a remote speech service.' }}
     </p>
   </section>
 </template>
 
 <script>
+import { ScribeCaptioner, scribeSupported } from '../lib/scribe';
 import { SpeechCaptioner, speechSupported } from '../lib/speech';
 
 const MESSAGES = {
@@ -51,6 +53,8 @@ const MESSAGES = {
   network: 'Speech service unreachable (network error). Captions need an internet connection in this browser.',
   unsupported: 'This browser does not support speech recognition. Try Chrome or Edge on desktop. Signing still works.',
   error: 'Speech recognition stopped unexpectedly. Tap the mic to retry.',
+  config: 'ElevenLabs captions aren’t set up on this server (missing or invalid ELEVENLABS_API_KEY). Switch Hindi captions to the browser engine in Settings.',
+  quota: 'ElevenLabs usage limit reached. Try again later, or switch Hindi captions to the browser engine in Settings.',
 };
 
 export default {
@@ -63,9 +67,8 @@ export default {
   emits: ['update-settings', 'final', 'mic-change'],
   data() {
     return {
-      status: speechSupported ? 'idle' : 'unsupported',
+      status: 'idle',
       interim: '',
-      supported: speechSupported,
       messages: MESSAGES,
     };
   },
@@ -73,37 +76,68 @@ export default {
     lang() {
       return this.settings.captionLang;
     },
+    /** Hindi can use ElevenLabs Scribe; English always uses the browser's recogniser. */
+    useScribe() {
+      return this.lang === 'hi-IN' && this.settings.hindiEngine === 'elevenlabs';
+    },
+    supported() {
+      return this.useScribe ? scribeSupported : speechSupported;
+    },
     on() {
       return this.status === 'listening' || this.status === 'starting';
     },
     bad() {
-      return ['denied', 'nomic', 'network', 'unsupported', 'error'].includes(this.status);
+      return ['denied', 'nomic', 'network', 'unsupported', 'error', 'config', 'quota'].includes(this.status);
     },
   },
   watch: {
-    lang(l) {
-      this.speech.setLang(l);
+    lang(l, old) {
+      this.switchEngine(old, this.settings.hindiEngine);
+    },
+    'settings.hindiEngine'(e, old) {
+      this.switchEngine(this.lang, old);
     },
     status(s) {
       this.$emit('mic-change', s === 'listening');
     },
     speaking(on) {
-      if (on) this.speech.suspend();
-      else this.speech.resume();
+      if (on) this.engine().suspend();
+      else this.engine().resume();
     },
   },
   created() {
-    // Kept off `data` so Vue doesn't proxy the recogniser.
-    this.speech = new SpeechCaptioner({
+    // Kept off `data` so Vue doesn't proxy the recognisers.
+    const callbacks = {
       onStatus: (s) => (this.status = s),
       onInterim: (t) => (this.interim = t),
       onFinal: (t, l) => this.$emit('final', t, l),
-    });
-    this.speech.lang = this.lang;
+    };
+    this.browser = new SpeechCaptioner(callbacks);
+    this.scribe = new ScribeCaptioner(callbacks);
+    this.browser.lang = this.scribe.lang = this.lang;
+    this.status = this.supported ? 'idle' : 'unsupported';
   },
   beforeUnmount() {
-    this.speech.destroy();
+    this.browser.destroy();
+    this.scribe.destroy();
     this.$emit('mic-change', false);
+  },
+  methods: {
+    engine(lang = this.lang, hindiEngine = this.settings.hindiEngine) {
+      return lang === 'hi-IN' && hindiEngine === 'elevenlabs' ? this.scribe : this.browser;
+    },
+    /** Moves listening to the right engine after the language or Hindi engine changed. */
+    switchEngine(oldLang, oldHindiEngine) {
+      const prev = this.engine(oldLang, oldHindiEngine);
+      const next = this.engine();
+      const wasOn = this.on;
+      if (prev !== next) {
+        prev.stop();
+        next.lang = this.lang;
+        if (wasOn) next.start(this.lang);
+        else this.status = this.supported ? 'idle' : 'unsupported';
+      } else next.setLang(this.lang);
+    },
   },
 };
 </script>

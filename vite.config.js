@@ -1,7 +1,8 @@
 import { readFile, rename, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import { mintScribeToken } from './server/scribe-token.mjs';
 
 const DATA_FILE = fileURLToPath(new URL('./src/data/isl-data.json', import.meta.url));
 const EMPTY = { settings: {}, samples: [] };
@@ -46,9 +47,23 @@ function islDataFile() {
   return { name: 'isl-data-file', configureServer: mount, configurePreviewServer: mount };
 }
 
+/** Dev/preview stand-in for netlify/functions/scribe-token.mjs. The key is read server-side only (no VITE_ prefix). */
+function scribeToken(apiKey) {
+  const mount = (server) => {
+    server.middlewares.use('/api/scribe-token', async (req, res) => {
+      const { status, body } = await mintScribeToken({ apiKey, method: req.method, origin: req.headers.origin, host: req.headers.host });
+      res.statusCode = status;
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Cache-Control', 'no-store');
+      res.end(JSON.stringify(body));
+    });
+  };
+  return { name: 'scribe-token', configureServer: mount, configurePreviewServer: mount };
+}
+
 // Polling avoids a native fsevents crash seen on some macOS/Node combinations.
 // The data file is ignored so saving samples doesn't trigger a reload.
-export default defineConfig({
-  plugins: [vue(), islDataFile()],
+export default defineConfig(({ mode }) => ({
+  plugins: [vue(), islDataFile(), scribeToken(loadEnv(mode, process.cwd(), '').ELEVENLABS_API_KEY)],
   server: { watch: { usePolling: true, ignored: ['**/src/data/isl-data.json*'] } },
-});
+}));

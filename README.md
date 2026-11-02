@@ -6,7 +6,7 @@ Vue 3 (Options API) + JavaScript + Vite. Implements the scope in `Scope.md` as a
   English or Hindi text (the manifest's `en` / `hi`) → spoken aloud with the browser's text-to-speech. Each recognition shows the
   sign's `type`, `hands` and `reviewStatus`, a confidence meter and up to three runner-up signs to pick instead of rejecting.
   Signs can also be tapped from a palette grouped by `category`, and words typed.
-- **Speaker lane** — Web Speech API speech-to-text (en-IN / hi-IN). Recognition pauses while the app is speaking so it doesn't
+- **Speaker lane** — speech-to-text: Web Speech API for English, ElevenLabs Scribe for Hindi (see below). Recognition pauses while the app is speaking so it doesn't
   caption its own voice. Vocabulary words heard in speech are shown as sign chips on the message.
 - **Signs** (dictionary with hear-it buttons), **Teach** (record landmark samples; warns when the hand count differs from the
   manifest's `hands`), **Settings** (voice per language, rate, auto-speak, strictness, contrast).
@@ -24,6 +24,15 @@ classifier) or a `classId` (output index of a future trained model). The previou
 Push the repo to GitHub (include `src/data/isl-data.json`) and import it in Netlify — `netlify.toml` sets the build command
 and `dist/` publish folder. The deployed site is read-only: every visitor gets the samples shipped in `isl-data.json`, and
 anything they record on Teach stays in their own browser. To update the shared model, record with `npm run dev`, commit, push.
+
+### Hindi captions (ElevenLabs)
+Hindi speech-to-text uses ElevenLabs Scribe realtime (`scribe_v2_realtime`) by default; Settings can switch it back to the
+browser's recogniser. English always uses the browser. The API key stays server-side: the page asks `/api/scribe-token`
+for a single-use token (15 min, one connection) and streams 16 kHz PCM from the mic to ElevenLabs over a WebSocket.
+- Local: add `ELEVENLABS_API_KEY=...` to `.env.local` (no `VITE_` prefix, so it is never bundled), restart `npm run dev`.
+- Netlify: add `ELEVENLABS_API_KEY` under environment variables; `netlify/functions/scribe-token.mjs` serves the endpoint.
+The endpoint rejects other websites' pages, but anyone can still script requests to it and spend your ElevenLabs credits —
+set a usage limit on the key in the ElevenLabs dashboard.
 
 ### Teach password
     npm run teach-password -- "your password"   # prints VITE_TEACH_PASSWORD_HASH=...

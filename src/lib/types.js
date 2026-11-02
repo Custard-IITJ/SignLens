@@ -43,6 +43,7 @@
  * @typedef {Object} Settings
  * @property {number} textSize
  * @property {'en-IN'|'hi-IN'} captionLang
+ * @property {'elevenlabs'|'browser'} hindiEngine speech-to-text engine for Hindi captions
  * @property {number} strictness
  * @property {boolean} highContrast
  * @property {'system'|'light'|'dark'} theme colour scheme; 'system' follows the OS
@@ -58,6 +59,7 @@
 export const DEFAULT_SETTINGS = {
   textSize: 28,
   captionLang: 'en-IN',
+  hindiEngine: 'elevenlabs',
   strictness: 0.5,
   highContrast: false,
   theme: 'system',
