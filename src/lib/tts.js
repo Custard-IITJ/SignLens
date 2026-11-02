@@ -4,8 +4,9 @@ const synth = typeof window !== 'undefined' ? window.speechSynthesis : undefined
 export const ttsSupported = !!synth && typeof SpeechSynthesisUtterance !== 'undefined';
 
 /**
- * Text-to-speech via the browser's speechSynthesis. Voices load asynchronously in Chrome,
- * so the list is refreshed on `voiceschanged`.
+ * Text-to-speech via the browser's speechSynthesis, or ElevenLabs (through /api/tts) for Hindi when `remote` is set,
+ * since many devices have no Hindi voice installed. English is never sent to ElevenLabs. Browser voices load asynchronously in
+ * Chrome, so the list is refreshed on `voiceschanged`.
  */
 export class Voice {
   /**
@@ -20,6 +21,8 @@ export class Voice {
     /** @type {SpeechSynthesisVoice[]} */
     this.voices = [];
     this.current = null;
+    this.audio = null;
+    this.request = null;
     if (!ttsSupported) return onStatus('unsupported');
     this.refresh = () => {
       this.voices = synth.getVoices();
@@ -49,11 +52,17 @@ export class Voice {
   /**
    * @param {string} text
    * @param {string} lang
-   * @param {{ rate?: number, uri?: string }} [opts]
+   * @param {{ rate?: number, uri?: string, remote?: boolean }} [opts] remote = speak Hindi with ElevenLabs
    */
-  speak(text, lang, { rate = 1, uri } = {}) {
-    if (!ttsSupported || !text.trim()) return;
-    synth.cancel();
+  speak(text, lang, { rate = 1, uri, remote = false } = {}) {
+    if (!text.trim()) return;
+    this.halt();
+    if (remote && lang === 'hi-IN') return this.speakRemote(text, lang, rate, uri);
+    this.speakLocal(text, lang, rate, uri);
+  }
+
+  speakLocal(text, lang, rate, uri) {
+    if (!ttsSupported) return this.onStatus('error');
     const u = new SpeechSynthesisUtterance(text);
     u.lang = lang;
     u.rate = rate;
@@ -68,21 +77,67 @@ export class Voice {
     synth.speak(u);
   }
 
+  async speakRemote(text, lang, rate, uri) {
+    const turn = {};
+    this.current = turn;
+    this.onStatus('speaking');
+    const request = new AbortController();
+    this.request = request;
+    let url;
+    try {
+      const res = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, lang }),
+        signal: request.signal,
+      });
+      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error ?? `HTTP ${res.status}`);
+      url = URL.createObjectURL(await res.blob());
+      if (this.current !== turn) return URL.revokeObjectURL(url);
+      const audio = new Audio(url);
+      audio.playbackRate = rate;
+      this.audio = audio;
+      const finish = (s) => {
+        URL.revokeObjectURL(url);
+        if (this.current === turn) this.done(s);
+      };
+      audio.onended = () => finish('idle');
+      audio.onerror = () => finish('error');
+      await audio.play();
+    } catch (e) {
+      if (url) URL.revokeObjectURL(url);
+      if (this.current !== turn || e.name === 'AbortError') return;
+      // ElevenLabs unavailable (no key, quota, offline): try the browser's own voice instead.
+      console.warn('ElevenLabs speech failed, using the browser voice:', e.message);
+      this.speakLocal(text, lang, rate, uri);
+    }
+  }
+
+  /** Stops whatever is playing or being fetched, without reporting a status change. */
+  halt() {
+    this.current = null;
+    this.request?.abort();
+    this.request = null;
+    if (this.audio) {
+      this.audio.onended = this.audio.onerror = null;
+      this.audio.pause();
+      this.audio = null;
+    }
+    if (ttsSupported) synth.cancel();
+  }
+
   done(s) {
     this.current = null;
     this.onStatus(s);
   }
 
   cancel() {
-    if (!ttsSupported) return;
-    this.current = null;
-    synth.cancel();
+    this.halt();
     this.onStatus('idle');
   }
 
   destroy() {
-    if (!ttsSupported) return;
-    synth.removeEventListener('voiceschanged', this.refresh);
+    if (ttsSupported) synth.removeEventListener('voiceschanged', this.refresh);
     this.cancel();
   }
 }

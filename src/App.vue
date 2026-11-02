@@ -216,7 +216,8 @@ export default {
     /** @param {string} text @param {string} lang BCP-47 */
     speak(text, lang) {
       const s = this.settings;
-      this.voice.speak(text, lang, { rate: s.voiceRate, uri: lang.startsWith('hi') ? s.voiceHi : s.voiceEn });
+      const hindi = lang.startsWith('hi');
+      this.voice.speak(text, lang, { rate: s.voiceRate, uri: hindi ? s.voiceHi : s.voiceEn, remote: hindi && s.hindiEngine === 'elevenlabs' });
     },
     sendSigned({ text, lang, alt }) {
       this.push({ source: 'sign', text, lang, alt });

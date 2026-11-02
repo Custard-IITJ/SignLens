@@ -22,7 +22,7 @@ function toBase64(int16) {
 }
 
 /**
- * Live captions via ElevenLabs Scribe realtime. Same interface as SpeechCaptioner so the lane can swap engines.
+ * Live Hindi captions via ElevenLabs Scribe realtime (never used for English). Same interface as SpeechCaptioner so the lane can swap engines.
  * Audio goes to ElevenLabs; the API key stays on the server, which hands out single-use tokens (/api/scribe-token).
  */
 export class ScribeCaptioner {
@@ -83,7 +83,7 @@ export class ScribeCaptioner {
   async start(lang = this.lang) {
     this.lang = lang;
     this.suspended = false;
-    if (!scribeSupported) return this.setStatus('unsupported');
+    if (!scribeSupported || lang !== 'hi-IN') return this.setStatus('unsupported');
     this.teardown();
     this.wanted = true;
     const session = this.session;
@@ -119,7 +119,7 @@ export class ScribeCaptioner {
     const params = new URLSearchParams({
       token,
       model_id: 'scribe_v2_realtime',
-      language_code: lang.slice(0, 2),
+      language_code: 'hi',
       audio_format: `pcm_${RATE}`,
       commit_strategy: 'vad',
     });

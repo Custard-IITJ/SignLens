@@ -2,7 +2,7 @@ import { readFile, rename, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import { mintScribeToken } from './server/scribe-token.mjs';
+import { mintScribeToken, synthesize } from './server/elevenlabs.mjs';
 
 const DATA_FILE = fileURLToPath(new URL('./src/data/isl-data.json', import.meta.url));
 const EMPTY = { settings: {}, samples: [] };
@@ -47,23 +47,42 @@ function islDataFile() {
   return { name: 'isl-data-file', configureServer: mount, configurePreviewServer: mount };
 }
 
-/** Dev/preview stand-in for netlify/functions/scribe-token.mjs. The key is read server-side only (no VITE_ prefix). */
-function scribeToken(apiKey) {
+/** Dev/preview stand-ins for netlify/functions/. Keys are read server-side only (no VITE_ prefix). */
+function elevenLabs(env) {
+  const json = (res, status, body) => {
+    res.statusCode = status;
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Cache-Control', 'no-store');
+    res.end(JSON.stringify(body));
+  };
+  const base = (req) => ({ apiKey: env.ELEVENLABS_API_KEY, method: req.method, origin: req.headers.origin, host: req.headers.host });
   const mount = (server) => {
     server.middlewares.use('/api/scribe-token', async (req, res) => {
-      const { status, body } = await mintScribeToken({ apiKey, method: req.method, origin: req.headers.origin, host: req.headers.host });
-      res.statusCode = status;
-      res.setHeader('Content-Type', 'application/json');
+      const { status, body } = await mintScribeToken(base(req));
+      json(res, status, body);
+    });
+    server.middlewares.use('/api/tts', async (req, res) => {
+      let raw = '';
+      for await (const chunk of req) raw += chunk;
+      let parsed = null;
+      try {
+        parsed = JSON.parse(raw);
+      } catch {
+        // synthesize() reports the missing text
+      }
+      const r = await synthesize({ ...base(req), voiceId: env.ELEVENLABS_VOICE_ID, modelId: env.ELEVENLABS_TTS_MODEL, json: parsed });
+      if (!r.audio) return json(res, r.status, r.body);
+      res.setHeader('Content-Type', 'audio/mpeg');
       res.setHeader('Cache-Control', 'no-store');
-      res.end(JSON.stringify(body));
+      res.end(Buffer.from(r.audio));
     });
   };
-  return { name: 'scribe-token', configureServer: mount, configurePreviewServer: mount };
+  return { name: 'elevenlabs', configureServer: mount, configurePreviewServer: mount };
 }
 
 // Polling avoids a native fsevents crash seen on some macOS/Node combinations.
 // The data file is ignored so saving samples doesn't trigger a reload.
 export default defineConfig(({ mode }) => ({
-  plugins: [vue(), islDataFile(), scribeToken(loadEnv(mode, process.cwd(), '').ELEVENLABS_API_KEY)],
+  plugins: [vue(), islDataFile(), elevenLabs(loadEnv(mode, process.cwd(), ''))],
   server: { watch: { usePolling: true, ignored: ['**/src/data/isl-data.json*'] } },
 }));

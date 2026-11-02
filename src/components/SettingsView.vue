@@ -17,10 +17,10 @@
           </div>
           <small v-if="settings.highContrast">High-contrast mode is on and overrides the theme.</small>
         </div>
-        <div class="field">Hindi speech-to-text
-          <div class="seg" role="radiogroup" aria-label="Hindi speech-to-text engine">
+        <div class="field">Hindi speech engine (captions &amp; voice)
+          <div class="seg" role="radiogroup" aria-label="Hindi speech engine">
             <button
-              v-for="[e, name] in [['elevenlabs', 'ElevenLabs Scribe'], ['browser', 'Browser']]"
+              v-for="[e, name] in [['elevenlabs', 'ElevenLabs'], ['browser', 'Browser']]"
               :key="e"
               role="radio"
               :aria-checked="settings.hindiEngine === e"
@@ -28,7 +28,7 @@
               @click="set('hindiEngine', e)"
             >{{ name }}</button>
           </div>
-          <small>ElevenLabs is usually more accurate for Hindi and works in any modern browser; it needs the server’s API key. English captions always use the browser.</small>
+          <small>ElevenLabs transcribes and speaks Hindi in any modern browser, even without a Hindi voice installed; it needs the server’s API key. English always uses the browser.</small>
         </div>
         <label class="field">Caption &amp; message text size: <b>{{ settings.textSize }}px</b>
           <input type="range" :min="18" :max="56" :value="settings.textSize" @input="set('textSize', +$event.target.value)" />
@@ -50,13 +50,19 @@
           <div v-for="[key, lang, label, sample] in voiceRows" :key="key" class="field">
             {{ label }} voice
             <div class="row tight">
-              <select :value="settings[key]" :aria-label="`${label} voice`" @change="set(key, $event.target.value)">
+              <select
+                :value="settings[key]"
+                :aria-label="`${label} voice`"
+                :disabled="lang === 'hi-IN' && settings.hindiEngine === 'elevenlabs'"
+                @change="set(key, $event.target.value)"
+              >
                 <option value="">Automatic</option>
                 <option v-for="v in voicesFor(lang)" :key="v.uri" :value="v.uri">{{ v.name }} ({{ v.lang }}){{ v.local ? '' : ' · online' }}</option>
               </select>
               <button class="btn small" @click="$emit('speak', sample, lang)">▶ Test</button>
             </div>
-            <small v-if="voices.length && !voicesFor(lang).length" class="hint">
+            <small v-if="lang === 'hi-IN' && settings.hindiEngine === 'elevenlabs'">Spoken by ElevenLabs; this browser voice is only used if ElevenLabs is unavailable.</small>
+            <small v-else-if="voices.length && !voicesFor(lang).length" class="hint">
               No {{ label }} voice is installed — it will be read with a default voice. Add one in your OS language/speech settings.
             </small>
           </div>
@@ -74,7 +80,7 @@
           <li v-else>Built-in sign samples ship with the app; samples you teach are landmark numbers stored in this browser only. Delete them any time in <em>Teach</em>.</li>
           <li>Spoken output uses voices installed in your browser/OS; some online voices send the text to the vendor.</li>
           <li><b>Speech captions:</b> Chrome and Edge typically send microphone audio to a remote speech service. Do not use captions for confidential conversations.</li>
-          <li v-if="settings.hindiEngine === 'elevenlabs'"><b>Hindi captions</b> stream microphone audio to ElevenLabs for transcription.</li>
+          <li v-if="settings.hindiEngine === 'elevenlabs'"><b>Hindi captions</b> stream microphone audio to ElevenLabs for transcription, and Hindi text is sent to ElevenLabs to be spoken.</li>
           <li>The hand-tracking model (~8&nbsp;MB) is downloaded from Google’s CDN on first use.</li>
         </ul>
         <h2>Limitations</h2>

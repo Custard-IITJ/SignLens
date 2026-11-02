@@ -1,4 +1,4 @@
-import { mintScribeToken } from '../../server/scribe-token.mjs';
+import { mintScribeToken } from '../../server/elevenlabs.mjs';
 
 export default async (req) => {
   const { status, body } = await mintScribeToken({

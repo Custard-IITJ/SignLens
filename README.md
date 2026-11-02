@@ -25,13 +25,15 @@ Push the repo to GitHub (include `src/data/isl-data.json`) and import it in Netl
 and `dist/` publish folder. The deployed site is read-only: every visitor gets the samples shipped in `isl-data.json`, and
 anything they record on Teach stays in their own browser. To update the shared model, record with `npm run dev`, commit, push.
 
-### Hindi captions (ElevenLabs)
-Hindi speech-to-text uses ElevenLabs Scribe realtime (`scribe_v2_realtime`) by default; Settings can switch it back to the
-browser's recogniser. English always uses the browser. The API key stays server-side: the page asks `/api/scribe-token`
+### Hindi speech (ElevenLabs)
+Hindi uses ElevenLabs by default — Scribe realtime (`scribe_v2_realtime`) for captions and `eleven_multilingual_v2` for
+speaking, so Hindi works even on devices with no Hindi voice installed. Settings can switch both back to the browser;
+English always uses the browser. Speech falls back to the browser voice if ElevenLabs fails. Optional env vars:
+`ELEVENLABS_VOICE_ID` (default: a premade voice) and `ELEVENLABS_TTS_MODEL`. The API key stays server-side: the page asks `/api/scribe-token`
 for a single-use token (15 min, one connection) and streams 16 kHz PCM from the mic to ElevenLabs over a WebSocket.
 - Local: add `ELEVENLABS_API_KEY=...` to `.env.local` (no `VITE_` prefix, so it is never bundled), restart `npm run dev`.
-- Netlify: add `ELEVENLABS_API_KEY` under environment variables; `netlify/functions/scribe-token.mjs` serves the endpoint.
-The endpoint rejects other websites' pages, but anyone can still script requests to it and spend your ElevenLabs credits —
+- Netlify: add `ELEVENLABS_API_KEY` under environment variables; `netlify/functions/` serves `/api/scribe-token` and `/api/tts`.
+The endpoints reject other websites' pages (and `/api/tts` caps text at 600 characters), but anyone can still script requests to them and spend your ElevenLabs credits —
 set a usage limit on the key in the ElevenLabs dashboard.
 
 ### Teach password
