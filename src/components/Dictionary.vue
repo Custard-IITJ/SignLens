@@ -39,25 +39,32 @@
         <div class="row tight">
           <button class="btn small" :aria-label="`Say ${s.en} in English`" @click="$emit('speak', signWord(s, 'en'), 'en-IN')">🔊 EN</button>
           <button class="btn small" :aria-label="`Say ${s.hi} in Hindi`" @click="$emit('speak', signWord(s, 'hi'), 'hi-IN')">🔊 हिं</button>
+          <button class="btn small push" :aria-label="`Show reference sign for ${s.en}`" @click="open = s">
+            ▶ Reference{{ references[s.id] ? '' : '…' }}
+          </button>
         </div>
       </article>
       <p v-if="!list.length" class="placeholder">No signs match.</p>
     </div>
+    <SignReference v-if="open" :sign="open" :reference="references[open.id]" @close="open = null" />
   </div>
 </template>
 
 <script>
+import references from '../data/isl-references.json';
 import { CATEGORY_LABELS, signWord } from '../lib/vocabulary';
+import SignReference from './SignReference.vue';
 
 export default {
   name: 'Dictionary',
+  components: { SignReference },
   props: {
     vocab: { type: Object, required: true },
     samples: { type: Array, required: true },
   },
   emits: ['speak'],
   data() {
-    return { q: '', cat: 'all', labels: CATEGORY_LABELS };
+    return { q: '', cat: 'all', labels: CATEGORY_LABELS, references, open: null };
   },
   computed: {
     counts() {

@@ -1,6 +1,9 @@
 <template>
   <div class="settings">
-    <div class="page-head"><h1>Settings &amp; Privacy</h1></div>
+    <div class="page-head row tight">
+      <h1>Settings &amp; Privacy</h1>
+      <button v-if="lockable" class="btn ghost push" @click="$emit('lock')">🔒 Lock</button>
+    </div>
     <div class="two">
       <section class="panel">
         <h2>Preferences</h2>
@@ -82,6 +85,7 @@
           <li><b>Speech captions:</b> Chrome and Edge typically send microphone audio to a remote speech service. Do not use captions for confidential conversations.</li>
           <li v-if="settings.hindiEngine === 'elevenlabs'"><b>Hindi captions</b> stream microphone audio to ElevenLabs for transcription, and Hindi text is sent to ElevenLabs to be spoken.</li>
           <li>The hand-tracking model (~8&nbsp;MB) is downloaded from Google’s CDN on first use.</li>
+          <li>Reference sign videos on the Signs page are embedded from YouTube (privacy-enhanced mode), only when you open one.</li>
         </ul>
         <h2>Limitations</h2>
         <ul>
@@ -103,6 +107,7 @@
 
 <script>
 import { FILE_WRITABLE } from '../lib/storage';
+import { TEACH_LOCK } from '../lib/teachLock';
 
 export default {
   name: 'SettingsView',
@@ -113,10 +118,11 @@ export default {
     voices: { type: Array, default: () => [] },
     ttsSupported: { type: Boolean, default: false },
   },
-  emits: ['update-settings', 'speak'],
+  emits: ['update-settings', 'speak', 'lock'],
   data() {
     return {
       fileWritable: FILE_WRITABLE,
+      lockable: TEACH_LOCK === 'locked',
       voiceRows: [
         ['voiceEn', 'en-IN', 'English', 'Hello, thank you.'],
         ['voiceHi', 'hi-IN', 'Hindi', 'नमस्ते, धन्यवाद।'],

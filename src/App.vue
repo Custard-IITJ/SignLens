@@ -63,7 +63,7 @@
       </div>
     </div>
     <Dictionary v-else-if="view === 'dictionary'" :vocab="vocab" :samples="samples" @speak="speak" />
-    <TeachLock v-else-if="view === 'teach' && !teachUnlocked" @unlock="unlockTeach" />
+    <PasswordLock v-else-if="view === 'teach' && !unlocked" title="Teach signs" @unlock="unlock" />
     <TeachView
       v-else-if="view === 'teach'"
       :vocab="vocab"
@@ -74,8 +74,9 @@
       @clear-all="replaceSamples([])"
       @replace-samples="replaceSamples"
       @camera-change="camera = $event"
-      @lock="lockTeach"
+      @lock="lock"
     />
+    <PasswordLock v-else-if="view === 'settings' && !unlocked" title="Settings & Privacy" @unlock="unlock" />
     <SettingsView
       v-else-if="view === 'settings'"
       :settings="settings"
@@ -85,6 +86,7 @@
       :tts-supported="ttsSupported"
       @update-settings="updateSettings"
       @speak="speak"
+      @lock="lock"
     />
   </main>
   <!-- <footer class="foot">Hand landmarks processed on-device · No accounts · Conversation is never stored</footer> -->
@@ -95,10 +97,10 @@
 import { markRaw } from 'vue';
 import vocabJson from './data/isl-vocabulary.json';
 import Dictionary from './components/Dictionary.vue';
+import PasswordLock from './components/PasswordLock.vue';
 import SettingsView from './components/SettingsView.vue';
 import SignerLane from './components/SignerLane.vue';
 import SpeakerLane from './components/SpeakerLane.vue';
-import TeachLock from './components/TeachLock.vue';
 import TeachView from './components/TeachView.vue';
 import Transcript from './components/Transcript.vue';
 import { FILE_WRITABLE, loadData, loadSamples, saveData, whenSaved } from './lib/storage';
@@ -117,7 +119,7 @@ const darkQuery = window.matchMedia?.('(prefers-color-scheme: dark)');
 
 export default {
   name: 'App',
-  components: { Dictionary, SettingsView, SignerLane, SpeakerLane, TeachLock, TeachView, Transcript },
+  components: { Dictionary, PasswordLock, SettingsView, SignerLane, SpeakerLane, TeachView, Transcript },
   data() {
     return {
       /** @type {View} */
@@ -130,7 +132,8 @@ export default {
       // Nothing is written back until the data file has been read, so defaults never overwrite it.
       loaded: false,
       storageError: false,
-      teachUnlocked: TEACH_LOCK === 'open' || rememberedUnlock(),
+      // One password unlocks both Teach and Settings for this tab.
+      unlocked: TEACH_LOCK === 'open' || rememberedUnlock(),
       /** @type {import('./lib/types').Entry[]} */
       entries: [],
       camera: false,
@@ -235,12 +238,12 @@ export default {
     clearSign(id) {
       this.samples = Object.freeze(this.samples.filter((s) => s.signId !== id));
     },
-    unlockTeach() {
-      this.teachUnlocked = true;
+    unlock() {
+      this.unlocked = true;
       rememberUnlock(true);
     },
-    lockTeach() {
-      this.teachUnlocked = false;
+    lock() {
+      this.unlocked = false;
       rememberUnlock(false);
     },
     replaceSamples(s) {

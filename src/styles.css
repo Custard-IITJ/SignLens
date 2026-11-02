@@ -1625,3 +1625,15 @@ a.tag:hover {
 .lock .field {
   margin-top: 0;
 }
+/* Sign reference modal */
+.ref-dialog {
+  width: min(640px, calc(100vw - 32px)); padding: 0; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow-lg);
+}
+.ref-dialog::backdrop { background: rgba(10, 12, 20, .55); backdrop-filter: blur(2px); }
+.ref-body { padding: 18px 20px 20px; }
+.ref-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+.ref-head h2 { margin: 0 0 6px; font-size: 1.35rem; } .ref-head .hi { font-weight: 500; color: var(--muted); margin-left: 6px; }
+.ref-video { position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius-sm); overflow: hidden; background: #000; }
+.ref-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.ref-empty { padding: 28px 16px; text-align: center; background: var(--sunken); border-radius: var(--radius-sm); }

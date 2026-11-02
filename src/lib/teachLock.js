@@ -1,5 +1,5 @@
 /**
- * Password gate for the Teach view. The site is static, so this is checked in the browser: it keeps casual visitors
+ * Password gate for the Teach and Settings views (one unlock covers both). The site is static, so this is checked in the browser: it keeps casual visitors
  * out of Teach, not a determined one. Only a salted PBKDF2 hash ships in the bundle, set at build time via
  * VITE_TEACH_PASSWORD_HASH (generate it with `npm run teach-password -- <password>`).
  */

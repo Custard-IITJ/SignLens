@@ -1,8 +1,8 @@
 <template>
-  <div class="teach-view">
+  <div>
     <div class="page-head">
-      <h1>Teach signs</h1>
-      <p class="muted">Teaching is limited to reviewers. Enter the Teach password to continue.</p>
+      <h1>{{ title }}</h1>
+      <p class="muted">Teach and Settings are limited to reviewers. Enter the password to continue.</p>
     </div>
     <form v-if="!unconfigured" class="panel lock" @submit.prevent="submit">
       <label class="field">Password
@@ -12,7 +12,7 @@
       <button class="btn primary" :disabled="!password || busy">{{ busy ? 'Checking…' : '🔓 Unlock' }}</button>
     </form>
     <p v-else class="panel lock err-text" role="alert">
-      Teach is disabled: this build has no password set. Add <code>VITE_TEACH_PASSWORD_HASH</code> to the site's environment
+      {{ title }} is disabled: this build has no password set. Add <code>VITE_TEACH_PASSWORD_HASH</code> to the site's environment
       variables and redeploy.
     </p>
   </div>
@@ -22,7 +22,11 @@
 import { checkTeachPassword, TEACH_LOCK } from '../lib/teachLock';
 
 export default {
-  name: 'TeachLock',
+  name: 'PasswordLock',
+  props: {
+    /** Heading of the locked page. */
+    title: { type: String, required: true },
+  },
   emits: ['unlock'],
   data() {
     return { password: '', wrong: false, busy: false, unconfigured: TEACH_LOCK === 'unconfigured' };

@@ -39,8 +39,8 @@ set a usage limit on the key in the ElevenLabs dashboard.
 ### Teach password
     npm run teach-password -- "your password"   # prints VITE_TEACH_PASSWORD_HASH=...
 Add that variable in Netlify (Site configuration → Environment variables) and redeploy; for local testing put the line in
-`.env.local` (git-ignored). Only the salted PBKDF2 hash ships, never the password. A build without it disables Teach;
-`npm run dev` without it leaves Teach open. The check runs in the browser, so it keeps casual visitors out rather than
+`.env.local` (git-ignored). Only the salted PBKDF2 hash ships, never the password. The same password locks Teach and Settings. A build without it disables both;
+`npm run dev` without it leaves them open. The check runs in the browser, so it keeps casual visitors out rather than
 being real security — on the deployed site Teach can only change the visitor's own browser data anyway.
 
 ## Browser
