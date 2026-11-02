@@ -1,57 +1,107 @@
-# SignLens — ISL Communication Assistant (Hackathon MVP)
+# Welcome to SignLens, developed by `Console.log("Custard")`
+A focused Indian Sign Language (ISL) based Sign-to-text-and-speech service. All you need to do is open [SignLens](https://signlenscustardiitj.netlify.app/) and do the signs. And? -- wait for the magic to happen :)  
 
-Vue 3 (Options API) + JavaScript + Vite. Implements the scope in `Scope.md` as a single two-lane conversation screen:
+## How to converse with SignLens?
 
-- **Signer lane** — camera → MediaPipe hand landmarks → on-device classifier → sign looked up in `src/data/isl-vocabulary.json` →
-  English or Hindi text (the manifest's `en` / `hi`) → spoken aloud with the browser's text-to-speech. Each recognition shows the
-  sign's `type`, `hands` and `reviewStatus`, a confidence meter and up to three runner-up signs to pick instead of rejecting.
-  Words can also be typed.
-- **Speaker lane** — speech-to-text: Web Speech API for English, ElevenLabs Scribe for Hindi (see below). Recognition pauses while the app is speaking so it doesn't
-  caption its own voice. Vocabulary words heard in speech are shown as sign chips on the message.
-- **Signs** (dictionary with hear-it buttons), **Teach** (record landmark samples; warns when the hand count differs from the
-  manifest's `hands`), **Settings** (voice per language, rate, auto-speak, strictness, contrast).
 
-`src/lib/vocabulary.js` validates the manifest and does all sign↔text work: `resolveSign` accepts either a `signId` (landmark
-classifier) or a `classId` (output index of a future trained model). The previous UI is kept in `_vue-v1-backup/`.
+- **Step 1** — Click on [SignLens](https://signlenscustardiitj.netlify.app/) or go to https://signlenscustardiitj.netlify.app/ 
+- **Step 2** — Go to the `Conversation` tab and click on the `Start Camera` under the `Signer` section to start signing. The camera will detect your signs, one word at a time. (Video stays on this device — only hand landmarks are analysed. Your privacy is taken care of.) 
+- **Step 3** The words you sign will come down below one by one. You can click on `Send & Speak` to send it to the `Speaker` section as it is read aloud. Alternatively, one may go to the `Speaker`section and click on the *Microphone* icon to start talking as it identifies your words one by one. All the text in the panel below can be attempted to be read aloud by clicking on the *Speaker* icon. Clicking on the `Export`button will allow you to download the text as an `.txt` file. 
+  
+- **That's all** - Yes, that is all you have to do. And everything is supported in both languages: English and Hindi. Use the sliders `English | हिन्दी ` - besides both the sections to switch between English and Hindi.
 
-## Run
-    npm install
-    npm run dev      # http://localhost:5173 (camera/mic need localhost or HTTPS)
-    npm run build    # production bundle in dist/ (deploy over HTTPS)
-    npm run preview  # serve dist/ locally, behaves like the deployed site
+## Architecture
 
-## Deploy (Netlify)
-Push the repo to GitHub (include `src/data/isl-data.json`) and import it in Netlify — `netlify.toml` sets the build command
-and `dist/` publish folder. The deployed site is read-only: every visitor gets the samples shipped in `isl-data.json`, and
-anything they record on Teach stays in their own browser. To update the shared model, record with `npm run dev`, commit, push.
+SignLens is a single-page **Vue 3 (Options API) + Vite** app that helps an Indian Sign Language (ISL) signer and an English/Hindi speaker talk to each other. Almost everything runs in the browser. The only server-side code is two small endpoints that keep the ElevenLabs API key secret, plus a dev-only endpoint that writes the training data file.
 
-### Hindi speech (ElevenLabs)
-Hindi uses ElevenLabs by default — Scribe realtime (`scribe_v2_realtime`) for captions and `eleven_multilingual_v2` for
-speaking, so Hindi works even on devices with no Hindi voice installed. Settings can switch both back to the browser;
-English always uses the browser. Speech falls back to the browser voice if ElevenLabs fails. Optional env vars:
-`ELEVENLABS_VOICE_ID` (default: a premade voice) and `ELEVENLABS_TTS_MODEL`. The API key stays server-side: the page asks `/api/scribe-token`
-for a single-use token (15 min, one connection) and streams 16 kHz PCM from the mic to ElevenLabs over a WebSocket.
-- Local: add `ELEVENLABS_API_KEY=...` to `.env.local` (no `VITE_` prefix, so it is never bundled), restart `npm run dev`.
-- Netlify: add `ELEVENLABS_API_KEY` under environment variables; `netlify/functions/` serves `/api/scribe-token` and `/api/tts`.
-The endpoints reject other websites' pages (and `/api/tts` caps text at 600 characters), but anyone can still script requests to them and spend your ElevenLabs credits —
-set a usage limit on the key in the ElevenLabs dashboard.
+```mermaid
+flowchart LR
+    subgraph Browser
+        direction LR
+        subgraph Signer["Signer side"]
+            direction LR
+            Cam["Camera"] --> MP["MediaPipe Hand Landmarker<br/>(on-device, WASM)"]
+            MP --> Feat["features.js<br/>feature vectors"]
+            Feat --> Eng["SignEngine + classifier<br/>(nearest neighbour)"]
+            Eng --> Tok["Message tokens<br/>(auto-added)"]
+        end
 
-### Teach password
-    npm run teach-password -- "your password"   # prints VITE_TEACH_PASSWORD_HASH=...
-Add that variable in Netlify (Site configuration → Environment variables) and redeploy; for local testing put the line in
-`.env.local` (git-ignored). Only the salted PBKDF2 hash ships, never the password. The same password locks Teach and Settings. A build without it disables both;
-`npm run dev` without it leaves them open. The check runs in the browser, so it keeps casual visitors out rather than
-being real security — on the deployed site Teach can only change the visitor's own browser data anyway.
+        subgraph Speaker["Speaker side"]
+            direction LR
+            Mic["Microphone"] --> Cap{"Caption language?"}
+            Cap -- English --> WSR["Web Speech API<br/>SpeechRecognition"]
+            Cap -- Hindi --> Scribe["ScribeCaptioner<br/>(AudioWorklet, 16 kHz PCM)"]
+        end
 
-## Browser
-Chrome or Edge on desktop (Web Speech API; Hindi needs `hi-IN` support). The hand model (~8 MB) downloads from Google's CDN on first use.
+        Data[("isl-data.json /<br/>localStorage samples")] --> Eng
+        Tok -- Send --> TR["Transcript"]
+        WSR --> TR
+        Scribe --> TR
+        TR --> Voice{"Voice (TTS)<br/>language?"}
+        Voice -- English --> WSS["Web Speech API<br/>speechSynthesis"]
+    end
 
-## Model & data
-No pre-trained ISL model is bundled. Use **Sign to Text → Teach** to record consented landmark samples per sign (landmarks only, no video),
-saved to `src/data/isl-data.json` by the dev server (read-only in the built site — see Deploy); export/import as JSON. Classification: normalised landmarks → nearest-neighbour with distance
-threshold, runner-up margin, 8-frame stability window, motion segmentation for dynamic signs, and confirm/reject before a word is added.
-Vocabulary lives in `src/data/isl-vocabulary.json` (76 candidates — 40 words, numbers 0–9 and letters A–Z — review status `pending` until an ISL-fluent reviewer approves).
+    subgraph Server["Vite dev server / Netlify Functions<br/>(holds ELEVENLABS_API_KEY)"]
+        Token["POST /api/scribe-token"]
+        TTS["POST /api/tts"]
+    end
 
-## Limitations
-Experimental; not a substitute for a qualified interpreter. Accuracy targets in Scope.md §13 must be measured with signer-held-out testing.
-Speech audio is typically processed remotely by the browser vendor.
+    subgraph EL["ElevenLabs"]
+        ELTok["Single-use token API"]
+        STTWS["Scribe v2 Realtime<br/>(WebSocket)"]
+        ELTTS["Multilingual v2 TTS"]
+    end
+
+    Scribe -- "1. get single-use token" --> Token
+    Token --> ELTok
+    Scribe -- "2. stream audio" --> STTWS
+    Voice -- Hindi --> TTS
+    TTS --> ELTTS
+```
+
+---
+
+
+## Customisation and Privacy
+You can use the following buttons and options in the way elaborated:
+### `Settings `
+
+Use the `Settings` page to customize the application's behavior, accessibility features, and privacy preferences.
+
+- Use the `Appearance` section to switch between `System`, `Light`, and `Dark` themes.
+- Use the `Hindi Speech Engine (Captions & Voice)` section to select the speech engine for Hindi captions and voice output.
+- Adjust the `Caption & Message Text Size` slider to increase or decrease text size.
+- Configure the `Recognition Strictness` slider to control sign recognition sensitivity and accuracy.
+- Enable `Show Hindi Label on Recognised Signs` to display Hindi labels for detected signs.
+- Enable `High-Contrast Mode` to improve visibility and accessibility.
+
+#### `Voice (Text to Speech)`
+- Enable `Speak Signed Messages Aloud When Sent` to hear translated messages.
+- Adjust the `Speaking Rate` slider to change voice playback speed.
+- Select preferred voices from the `English Voice` and `Hindi Voice` dropdown menus.
+- Use the `Test` button to preview the selected voice.
+
+#### `Device Status`
+- View the current status of the camera and microphone.
+
+#### `Privacy`
+- Review how camera, microphone, speech, and sign-language data are processed and stored.
+- Understand which features operate locally within the browser and which may use external services.
+
+#### `Limitations & Troubleshooting`
+- Review the current limitations of the sign recognition and translation system.
+- Access troubleshooting guidance for permissions, browser compatibility, lighting conditions, and speech-recognition setup.
+
+The `Settings` page helps you personalize the application, improve accessibility, optimize recognition accuracy, and manage privacy-related settings.
+
+## Training our Model
+
+Training our model under the `Teach` is restricted to developers and reviewers.
+
+## Anything else?
+
+- You can go to the `Signs` tab to explore the signs available to converse in. The number is increasing every moment as we expand our dictionary. We follow the official ISTRTC dictionary.
+
+------
+Developed by `Console.log("Custard")`team
+The website is powered by netlify.com

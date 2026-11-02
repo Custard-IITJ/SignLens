@@ -2,7 +2,7 @@
   <div>
     <div class="page-head">
       <h1>{{ title }}</h1>
-      <p class="muted">Teach and Settings are limited to reviewers. Enter the password to continue.</p>
+      <p class="muted">Teaching signs is limited to reviewers. Enter the password to continue.</p>
     </div>
     <form v-if="!unconfigured" class="panel lock" @submit.prevent="submit">
       <label class="field">Password

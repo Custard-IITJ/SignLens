@@ -76,7 +76,6 @@
       @camera-change="camera = $event"
       @lock="lock"
     />
-    <PasswordLock v-else-if="view === 'settings' && !unlocked" title="Settings & Privacy" @unlock="unlock" />
     <SettingsView
       v-else-if="view === 'settings'"
       :settings="settings"
@@ -86,7 +85,6 @@
       :tts-supported="ttsSupported"
       @update-settings="updateSettings"
       @speak="speak"
-      @lock="lock"
     />
     <About v-else-if="view === 'about'" :vocab="vocab" />
   </main>
@@ -134,7 +132,7 @@ export default {
       // Nothing is written back until the data file has been read, so defaults never overwrite it.
       loaded: false,
       storageError: false,
-      // One password unlocks both Teach and Settings for this tab.
+      // The password unlocks Teach for this tab.
       unlocked: TEACH_LOCK === 'open' || rememberedUnlock(),
       /** @type {import('./lib/types').Entry[]} */
       entries: [],

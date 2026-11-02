@@ -11,6 +11,7 @@
 export const CATEGORY_LABELS = {
   greetings: 'Greetings', courtesy: 'Courtesy', needs: 'Needs', people: 'People', actions: 'Actions',
   feelings: 'Health & feelings', communication: 'Communication', daily: 'Daily life',
+  places: 'Places & directions', education: 'Education', sports: 'Sports',
   numbers: 'Numbers', alphabet: 'Alphabet',
 };
 
@@ -49,6 +50,10 @@ export function loadVocabulary(json) {
     byId.set(sign.id, sign);
     byClassId.set(sign.classId, sign);
   }
+  // Known categories in label order (numbers and letters last), unknown ones after; stable within a category.
+  const order = Object.keys(CATEGORY_LABELS);
+  const rank = (c) => (order.includes(c) ? order.indexOf(c) : order.length);
+  signs.sort((a, b) => rank(a.category) - rank(b.category));
   const categories = [...new Set(signs.map((s) => s.category))];
   return Object.freeze({ version: json?.version ?? 'unknown', signs: Object.freeze(signs), byId, byClassId, categories });
 }
@@ -116,7 +121,8 @@ export function findSignsInText(text, vocab) {
       // Word boundaries that also work for Devanagari (where \b does not); digits count as part of a word so "5" doesn't match in "15".
       const m = new RegExp(`(^|[^\\p{L}\\p{M}\\p{N}'])${escapeRe(f)}(?=$|[^\\p{L}\\p{M}\\p{N}'])`, 'iu').exec(text);
       if (m) {
-        hits.push({ sign, at: m.index, len: f.length });
+        // m.index points at the separator before the word (if any), not the word itself.
+        hits.push({ sign, at: m.index + m[1].length, len: f.length });
         break;
       }
     }
@@ -128,7 +134,7 @@ export function findSignsInText(text, vocab) {
   for (const h of hits) {
     if (h.at < end) continue;
     out.push(h.sign);
-    end = h.at + h.len + 1;
+    end = h.at + h.len;
   }
   return out;
 }

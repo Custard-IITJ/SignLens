@@ -247,7 +247,8 @@ nav button {
   padding: 8px 14px;
   border-radius: 10px;
   cursor: pointer;
-  font: 600 .92rem inherit;
+  font-weight: 600;
+  font: .92rem Inter, 'Noto Sans Devanagari', system-ui, sans-serif;
   transition: color .15s, background .15s;
 }
 

@@ -1,8 +1,7 @@
 <template>
   <div class="settings">
-    <div class="page-head row tight">
+    <div class="page-head">
       <h1>Settings &amp; Privacy</h1>
-      <button v-if="lockable" class="btn ghost push" @click="$emit('lock')">🔒 Lock</button>
     </div>
     <div class="two">
       <section class="panel">
@@ -107,7 +106,6 @@
 
 <script>
 import { FILE_WRITABLE } from '../lib/storage';
-import { TEACH_LOCK } from '../lib/teachLock';
 
 export default {
   name: 'SettingsView',
@@ -118,11 +116,10 @@ export default {
     voices: { type: Array, default: () => [] },
     ttsSupported: { type: Boolean, default: false },
   },
-  emits: ['update-settings', 'speak', 'lock'],
+  emits: ['update-settings', 'speak'],
   data() {
     return {
       fileWritable: FILE_WRITABLE,
-      lockable: TEACH_LOCK === 'locked',
       voiceRows: [
         ['voiceEn', 'en-IN', 'English', 'Hello, thank you.'],
         ['voiceHi', 'hi-IN', 'Hindi', 'नमस्ते, धन्यवाद।'],
