@@ -7,3 +7,4 @@ dist/
 src/data/isl-data.json.tmp
 .env.local
 .env.*.local
+Scope.md

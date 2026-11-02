@@ -87,7 +87,8 @@
       @speak="speak"
     />
   </main>
-  <footer class="foot">Hand landmarks processed on-device · No accounts · Conversation is never stored</footer>
+  <!-- <footer class="foot">Hand landmarks processed on-device · No accounts · Conversation is never stored</footer> -->
+  <footer class="foot">Made by Console.log("Custard")</footer>
 </template>
 
 <script>
