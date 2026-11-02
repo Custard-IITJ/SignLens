@@ -14,7 +14,11 @@
         <li>
           <a href="https://divyangjan.depwd.gov.in/islrtc/" target="_blank" rel="noreferrer">ISLRTC Indian Sign Language Dictionary</a>
           — Indian Sign Language Research and Training Centre, Department of Empowerment of Persons with Disabilities, Government of
-          India. Primary reference for the {{ vocab.signs.length }} candidate signs in vocabulary v{{ vocab.version }}.
+          India.
+        </li>
+        <li>
+          <a href=" https://indiansignlanguage.org/" target="_blank" rel="noreferrer">Indiansignlanguage.org</a> — The sign references which
+          helped us to train the model.
         </li>
         <li>
           <a href="https://islrtc.nic.in/" target="_blank" rel="noreferrer">ISLRTC website</a> — official information on ISL and its
@@ -26,22 +30,6 @@
           not copied, and remain the property of ISLRTC.
         </li>
       </ul>
-
-      <details class="ref-list">
-        <summary>Reference video for each sign</summary>
-        <table>
-          <thead>
-            <tr><th scope="col">Sign</th><th scope="col">ISLRTC video</th></tr>
-          </thead>
-          <tbody>
-            <tr v-for="v in videos" :key="v.youtube">
-              <td>{{ v.signs.join(', ') }}</td>
-              <td><a :href="`https://www.youtube.com/watch?v=${v.youtube}`" target="_blank" rel="noreferrer">{{ v.title }}</a></td>
-            </tr>
-          </tbody>
-        </table>
-        <p v-if="missing.length" class="muted small">No verified video yet: {{ missing.join(', ') }}.</p>
-      </details>
     </section>
 
     <section class="panel">
