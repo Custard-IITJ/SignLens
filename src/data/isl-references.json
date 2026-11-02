@@ -1,1 +1,543 @@
-{}
+{
+ "sign-01": {
+  "youtube": "yBQA3coUjH0",
+  "start": 0,
+  "end": null,
+  "title": "hello",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-02": {
+  "youtube": "L37McuHckSI",
+  "start": 0,
+  "end": null,
+  "title": "Good morning",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-03": {
+  "youtube": "zxwuZPkYjrQ",
+  "start": 0,
+  "end": null,
+  "title": "Good night",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-04": {
+  "youtube": "P8c9TRiU7HI",
+  "start": 0,
+  "end": null,
+  "title": "invite, welcome",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "ISLRTC entry “invite, welcome” — welcoming someone (not “you’re welcome”)."
+ },
+ "sign-05": {
+  "youtube": "O6YJgD20e2g",
+  "start": 0,
+  "end": null,
+  "title": "bye, goodbye",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-06": {
+  "youtube": "vMbLDoCayk8",
+  "start": 0,
+  "end": null,
+  "title": "please (sign 1)",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "ISLRTC lists several variants; this is sign 1."
+ },
+ "sign-07": {
+  "youtube": "wK8amEJAK1Y",
+  "start": 0,
+  "end": null,
+  "title": "Thank you",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-08": {
+  "youtube": "TiPPYhh323E",
+  "start": 0,
+  "end": null,
+  "title": "sorry (sign 1)",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "ISLRTC lists several variants; this is sign 1."
+ },
+ "sign-09": {
+  "youtube": "LAT-u9Ww5ZU",
+  "start": 0,
+  "end": null,
+  "title": "yes (sign 1)",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-10": {
+  "youtube": "CXEDTo1PXCg",
+  "start": 0,
+  "end": null,
+  "title": "no (sign 1)",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-11": {
+  "youtube": "0iE1wBnQ7JY",
+  "start": 0,
+  "end": null,
+  "title": "help",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-12": {
+  "youtube": "SlORjr0kUM4",
+  "start": 0,
+  "end": null,
+  "title": "water",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-13": {
+  "youtube": "dTI8mMq81eM",
+  "start": 0,
+  "end": null,
+  "title": "food",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-14": {
+  "youtube": "pyrA60I4x5k",
+  "start": 0,
+  "end": null,
+  "title": "washroom",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "ISLRTC entry “washroom” — the closest dictionary entry for toilet."
+ },
+ "sign-16": {
+  "youtube": "1f6OchgCQrE",
+  "start": 0,
+  "end": null,
+  "title": "I, me",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-18": {
+  "youtube": "z2B7VrBSA5c",
+  "start": 0,
+  "end": null,
+  "title": "friend",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-19": {
+  "youtube": "koQGuKWogME",
+  "start": 0,
+  "end": null,
+  "title": "family (sign 1)",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-20": {
+  "youtube": "Qy_q0sAucuw",
+  "start": 0,
+  "end": null,
+  "title": "teacher",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-21": {
+  "youtube": "zobbHZq0U4w",
+  "start": 0,
+  "end": null,
+  "title": "come (sign 1)",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-22": {
+  "youtube": "CMmQ1rh-5hQ",
+  "start": 0,
+  "end": null,
+  "title": "go",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-23": {
+  "youtube": "M24VjuHEfgo",
+  "start": 0,
+  "end": null,
+  "title": "Wait",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-24": {
+  "youtube": "FHwjyQeLNuY",
+  "start": 0,
+  "end": null,
+  "title": "stop (sign 1)",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-25": {
+  "youtube": "kYwtY_FCM1c",
+  "start": 0,
+  "end": null,
+  "title": "complete, finish",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-26": {
+  "youtube": "p9SdpeHMkZ0",
+  "start": 0,
+  "end": null,
+  "title": "happy",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-27": {
+  "youtube": "vzzmwuU-sMg",
+  "start": 0,
+  "end": null,
+  "title": "sad",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-28": {
+  "youtube": "r9DiSHym81k",
+  "start": 0,
+  "end": null,
+  "title": "tired, exhausted, fatigued",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-29": {
+  "youtube": "z_WykkCqulk",
+  "start": 0,
+  "end": null,
+  "title": "sick (sign 1)",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-30": {
+  "youtube": "B71wV1k7n4M",
+  "start": 0,
+  "end": null,
+  "title": "Ache, Pain",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-31": {
+  "youtube": "-rahbCV2Pp4",
+  "start": 0,
+  "end": null,
+  "title": "Understand",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-32": {
+  "youtube": "ys2pu1IWymg",
+  "start": 0,
+  "end": null,
+  "title": "I don't understand",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-33": {
+  "youtube": "aO1B2sAfigI",
+  "start": 0,
+  "end": null,
+  "title": "again, repeat (sign 1)",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-34": {
+  "youtube": "Zk_8W3_6jo4",
+  "start": 0,
+  "end": null,
+  "title": "what",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-35": {
+  "youtube": "8wgrPnyzpMw",
+  "start": 0,
+  "end": null,
+  "title": "where",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-36": {
+  "youtube": "U--0FZU2bDg",
+  "start": 0,
+  "end": null,
+  "title": "house, home",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-37": {
+  "youtube": "_UQrz5J8Ook",
+  "start": 0,
+  "end": null,
+  "title": "school",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-38": {
+  "youtube": "t9pvXOgaJe8",
+  "start": 0,
+  "end": null,
+  "title": "work sign 1",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-39": {
+  "youtube": "YhHAI3h-Pno",
+  "start": 0,
+  "end": null,
+  "title": "phone",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-41": {
+  "youtube": "pwGHjBM_o0A",
+  "start": 0,
+  "end": null,
+  "title": "0 zero",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-42": {
+  "youtube": "lH6pT7nQb9A",
+  "start": 0,
+  "end": null,
+  "title": "1 one",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-43": {
+  "youtube": "MhHOduyqKv4",
+  "start": 0,
+  "end": null,
+  "title": "2 two",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-44": {
+  "youtube": "Sh3P9rHIKOM",
+  "start": 0,
+  "end": null,
+  "title": "3 three",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-45": {
+  "youtube": "ouQmvo795rE",
+  "start": 0,
+  "end": null,
+  "title": "4 four",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-46": {
+  "youtube": "BYnUpQfk3Ts",
+  "start": 0,
+  "end": null,
+  "title": "5 five",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-47": {
+  "youtube": "T6vd9Criu48",
+  "start": 0,
+  "end": null,
+  "title": "6 six",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-48": {
+  "youtube": "MZZ52lsCfSw",
+  "start": 0,
+  "end": null,
+  "title": "7 seven",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-49": {
+  "youtube": "l_QL6DBEeFk",
+  "start": 0,
+  "end": null,
+  "title": "8 eight",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-50": {
+  "youtube": "-NQKa7Pmhx4",
+  "start": 0,
+  "end": null,
+  "title": "9 nine",
+  "channel": "Indian Sign Language Research and Training Centre"
+ },
+ "sign-51": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; A is letter 1 of 26."
+ },
+ "sign-52": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; B is letter 2 of 26."
+ },
+ "sign-53": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; C is letter 3 of 26."
+ },
+ "sign-54": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; D is letter 4 of 26."
+ },
+ "sign-55": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; E is letter 5 of 26."
+ },
+ "sign-56": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; F is letter 6 of 26."
+ },
+ "sign-57": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; G is letter 7 of 26."
+ },
+ "sign-58": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; H is letter 8 of 26."
+ },
+ "sign-59": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; I is letter 9 of 26."
+ },
+ "sign-60": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; J is letter 10 of 26."
+ },
+ "sign-61": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; K is letter 11 of 26."
+ },
+ "sign-62": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; L is letter 12 of 26."
+ },
+ "sign-63": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; M is letter 13 of 26."
+ },
+ "sign-64": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; N is letter 14 of 26."
+ },
+ "sign-65": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; O is letter 15 of 26."
+ },
+ "sign-66": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; P is letter 16 of 26."
+ },
+ "sign-67": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; Q is letter 17 of 26."
+ },
+ "sign-68": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; R is letter 18 of 26."
+ },
+ "sign-69": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; S is letter 19 of 26."
+ },
+ "sign-70": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; T is letter 20 of 26."
+ },
+ "sign-71": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; U is letter 21 of 26."
+ },
+ "sign-72": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; V is letter 22 of 26."
+ },
+ "sign-73": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; W is letter 23 of 26."
+ },
+ "sign-74": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; X is letter 24 of 26."
+ },
+ "sign-75": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; Y is letter 25 of 26."
+ },
+ "sign-76": {
+  "youtube": "VdwKSyza5oI",
+  "start": 0,
+  "end": null,
+  "title": "Alphabets A Z in ISL",
+  "channel": "Indian Sign Language Research and Training Centre",
+  "note": "The full A–Z fingerspelling video — letters appear in order; Z is letter 26 of 26."
+ }
+}

@@ -3,9 +3,7 @@
     <div class="page-head">
       <h1>Sign dictionary</h1>
       <p class="muted">
-        {{ vocab.signs.length }} candidate signs from vocabulary v{{ vocab.version }}. Check each in the official
-        <a href="https://divyangjan.depwd.gov.in/islrtc/" target="_blank" rel="noreferrer">ISLRTC dictionary</a> and have an ISL-fluent reviewer
-        approve it before use. Regional variants exist.
+        {{ vocab.signs.length }} candidate signs from vocabulary v{{ vocab.version }}.
       </p>
     </div>
     <div class="row">
@@ -40,7 +38,7 @@
           <button class="btn small" :aria-label="`Say ${s.en} in English`" @click="$emit('speak', signWord(s, 'en'), 'en-IN')">🔊 EN</button>
           <button class="btn small" :aria-label="`Say ${s.hi} in Hindi`" @click="$emit('speak', signWord(s, 'hi'), 'hi-IN')">🔊 हिं</button>
           <button class="btn small push" :aria-label="`Show reference sign for ${s.en}`" @click="open = s">
-            ▶ Reference{{ references[s.id] ? '' : '…' }}
+            ▶ Reference sign
           </button>
         </div>
       </article>

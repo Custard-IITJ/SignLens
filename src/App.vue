@@ -88,6 +88,7 @@
       @speak="speak"
       @lock="lock"
     />
+    <About v-else-if="view === 'about'" :vocab="vocab" />
   </main>
   <!-- <footer class="foot">Hand landmarks processed on-device · No accounts · Conversation is never stored</footer> -->
   <footer class="foot">Made by Console.log("Custard")</footer>
@@ -96,6 +97,7 @@
 <script>
 import { markRaw } from 'vue';
 import vocabJson from './data/isl-vocabulary.json';
+import About from './components/About.vue';
 import Dictionary from './components/Dictionary.vue';
 import PasswordLock from './components/PasswordLock.vue';
 import SettingsView from './components/SettingsView.vue';
@@ -109,17 +111,17 @@ import { DEFAULT_SETTINGS } from './lib/types';
 import { ttsSupported, Voice } from './lib/tts';
 import { findSignsInText, loadVocabulary } from './lib/vocabulary';
 
-/** @typedef {'talk'|'dictionary'|'teach'|'settings'} View */
+/** @typedef {'talk'|'dictionary'|'teach'|'settings'|'about'} View */
 
 const NAV = [
-  ['talk', 'Conversation'], ['dictionary', 'Signs'], ['teach', 'Teach'], ['settings', 'Settings'],
+  ['talk', 'Conversation'], ['dictionary', 'Signs'], ['teach', 'Teach'], ['settings', 'Settings'], ['about', 'About'],
 ];
 
 const darkQuery = window.matchMedia?.('(prefers-color-scheme: dark)');
 
 export default {
   name: 'App',
-  components: { Dictionary, PasswordLock, SettingsView, SignerLane, SpeakerLane, TeachView, Transcript },
+  components: { About, Dictionary, PasswordLock, SettingsView, SignerLane, SpeakerLane, TeachView, Transcript },
   data() {
     return {
       /** @type {View} */
