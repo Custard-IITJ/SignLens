@@ -3,7 +3,6 @@
 :root {
   color-scheme: light;
   --bg: #f5f6f8;
-  --bg-tint: #eef0fb;
   --surface: #ffffff;
   --surface-2: #fafbfc;
   --sunken: #eef0f3;
@@ -37,7 +36,6 @@
   :root:not([data-theme='light']) {
     color-scheme: dark;
     --bg: #0d0f13;
-    --bg-tint: #13152a;
     --surface: #15181e;
     --surface-2: #1a1d24;
     --sunken: #20242c;
@@ -66,7 +64,6 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
   --bg: #0d0f13;
-  --bg-tint: #13152a;
   --surface: #15181e;
   --surface-2: #1a1d24;
   --sunken: #20242c;
@@ -94,7 +91,6 @@
 :root[data-contrast='high'] {
   color-scheme: dark;
   --bg: #000;
-  --bg-tint: #000;
   --surface: #000;
   --surface-2: #000;
   --sunken: #111;
@@ -1074,18 +1070,7 @@ a.tag:hover {
   font-size: .95rem;
 }
 
-/* Palette */
-.palette {
-  margin-top: 14px;
-  padding: 14px;
-  border-radius: 13px;
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-}
-
-.palette-head {
-  display: flex;
-}
+/* Category chips (Signs page) */
 
 .chips {
   display: flex;
@@ -1114,39 +1099,6 @@ a.tag:hover {
   background: var(--text);
   color: var(--bg);
   border-color: var(--text);
-}
-
-.palette-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
-  gap: 6px;
-  max-height: 260px;
-  overflow-y: auto;
-  padding-right: 2px;
-}
-
-.pick {
-  display: grid;
-  gap: 1px;
-  text-align: left;
-  padding: 9px 11px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--text);
-  cursor: pointer;
-  font: inherit;
-  transition: border-color .12s, background .12s, transform .12s;
-}
-
-.pick:hover {
-  border-color: var(--signer);
-  background: var(--signer-soft);
-  transform: translateY(-1px);
-}
-
-.pick small {
-  color: var(--muted);
 }
 
 /* Speaker */

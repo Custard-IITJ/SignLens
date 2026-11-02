@@ -23,6 +23,7 @@
             {{ word(s) }} <kbd>{{ i + 2 }}</kbd>
           </button>
           <button class="btn glass" @click="undo">✕ Wrong sign <kbd>Backspace</kbd></button>
+          <button class="btn glass" @click="dismiss">Close <kbd>Esc</kbd></button>
         </div>
       </div>
     </CameraStage>
@@ -58,7 +59,7 @@
           ref="typed"
           v-model="typed"
           class="token-input"
-          :placeholder="tokens.length ? 'Type a word…' : 'Recognised signs collect here — or type / pick a sign'"
+          :placeholder="tokens.length ? 'Type a word…' : 'Recognised signs collect here — or type a word'"
           aria-label="Type a word"
           @keydown.enter.prevent="typed.trim() ? addTyped() : send()"
           @keydown.backspace="!typed && tokens.length && tokens.pop()"
@@ -71,15 +72,12 @@
       </p>
 
       <div class="row">
-        <button class="btn" :aria-expanded="palette" @click="palette = !palette">🔤 Pick a sign</button>
         <button class="btn" :disabled="!text" @click="speakPreview">{{ speaking ? '■ Stop' : '🔊 Speak' }}</button>
         <button class="btn ghost" :disabled="!tokens.length" @click="tokens = []">Clear</button>
         <button class="btn primary push" :disabled="!text && !typed.trim()" @click="send">
           Send{{ settings.autoSpeak ? ' & speak' : '' }} ➤
         </button>
       </div>
-
-      <SignPalette v-if="palette" :vocab="vocab" :lang="settings.signLang" @pick="addSign" />
     </div>
   </section>
 </template>
@@ -88,11 +86,10 @@
 import { SignEngine } from '../lib/engine';
 import { composeText, signWord } from '../lib/vocabulary';
 import CameraStage from './CameraStage.vue';
-import SignPalette from './SignPalette.vue';
 
 export default {
   name: 'SignerLane',
-  components: { CameraStage, SignPalette },
+  components: { CameraStage },
   props: {
     vocab: { type: Object, required: true },
     samples: { type: Array, required: true },
@@ -107,7 +104,6 @@ export default {
       /** @type {import('../lib/types').Token[]} */
       tokens: [],
       typed: '',
-      palette: false,
       /** Most recent auto-added sign, kept so it can be undone or swapped for an alternative. */
       lastAdded: null,
     };
@@ -223,7 +219,13 @@ export default {
       t.signId = sign.id;
       this.lastAdded = { ...this.lastAdded, sign, alternatives: this.lastAdded.alternatives.filter((s) => s !== sign).concat(this.lastAdded.sign) };
     },
+    /** Hides the "Added" panel; the word stays in the message. */
+    dismiss() {
+      this.lastAdded = null;
+    },
     onKey(e) {
+      // Esc works even while typing, since it has no other job in the text box.
+      if (e.key === 'Escape' && this.lastAdded) return this.dismiss();
       if (e.target?.closest?.('input,textarea,select,[contenteditable]')) return;
       if (e.key === 'Backspace' && this.tokens.length) {
         e.preventDefault();

@@ -5,7 +5,7 @@ Vue 3 (Options API) + JavaScript + Vite. Implements the scope in `Scope.md` as a
 - **Signer lane** — camera → MediaPipe hand landmarks → on-device classifier → sign looked up in `src/data/isl-vocabulary.json` →
   English or Hindi text (the manifest's `en` / `hi`) → spoken aloud with the browser's text-to-speech. Each recognition shows the
   sign's `type`, `hands` and `reviewStatus`, a confidence meter and up to three runner-up signs to pick instead of rejecting.
-  Signs can also be tapped from a palette grouped by `category`, and words typed.
+  Words can also be typed.
 - **Speaker lane** — speech-to-text: Web Speech API for English, ElevenLabs Scribe for Hindi (see below). Recognition pauses while the app is speaking so it doesn't
   caption its own voice. Vocabulary words heard in speech are shown as sign chips on the message.
 - **Signs** (dictionary with hear-it buttons), **Teach** (record landmark samples; warns when the hand count differs from the
