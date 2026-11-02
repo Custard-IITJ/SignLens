@@ -1,0 +1,9 @@
+node_modules/
+dist/
+_react-backup/
+_vue-v1-backup/
+dist/
+.DS_Store
+src/data/isl-data.json.tmp
+.env.local
+.env.*.local
